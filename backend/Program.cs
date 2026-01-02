@@ -55,9 +55,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("AllowAngular");
 
-// Custom middleware (order matters!)
-// app.UseMiddleware<AuthorizationMiddleware>();
-// app.UseMiddleware<AuditMiddleware>();
+// Custom middleware
+app.UseMiddleware<AuditMiddleware>();
 
 // Only use HTTPS redirection in production
 if (!app.Environment.IsDevelopment())
