@@ -32,6 +32,7 @@ builder.Services.AddScoped<IPatientRepository, PatientRepository>();
 builder.Services.AddScoped<ICaregiverRepository, CaregiverRepository>();
 builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<ICaregiverService, CaregiverService>();
+builder.Services.AddScoped<ISearchService, SearchService>();
 
 // CORS
 var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() 
@@ -70,12 +71,26 @@ if (!app.Environment.IsDevelopment())
 app.UseAuthorization();
 app.MapControllers();
 
-// Seed sample data in development
+// Apply migrations and seed sample data in development
 if (app.Environment.IsDevelopment())
 {
     using var scope = app.Services.CreateScope();
     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    await HealthcareApp.Data.DataSeeder.SeedAsync(context);
+    
+    try
+    {
+        // Apply pending migrations
+        Console.WriteLine("🔄 Applying migrations...");
+        await context.Database.MigrateAsync();
+        Console.WriteLine("✅ Migrations applied successfully.");
+        
+        // Seed sample data
+        await HealthcareApp.Data.DataSeeder.SeedAsync(context);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"❌ Error during database setup: {ex.Message}");
+    }
 }
 
 app.Run();

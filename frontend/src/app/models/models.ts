@@ -45,6 +45,13 @@ export interface Caregiver {
   officeName: string;
 }
 
+export interface Office {
+  id: number;
+  name: string;
+  address: string;
+  phone: string;
+}
+
 export interface SearchResult<T> {
   items: T[];
   totalCount: number;
@@ -59,4 +66,41 @@ export interface SearchRequest {
   pageSize: number;
   sortBy?: string;
   isDescending: boolean;
+}
+
+// Unified search results
+export interface OfficeSearchResult {
+  id: number;
+  name: string;
+  address: string;
+  phone: string;
+}
+
+export interface PatientSearchResult {
+  id: number;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  email: string;
+  officeName: string;
+}
+
+export interface CaregiverSearchResult {
+  id: number;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  email: string;
+  specialization: string;
+  officeName: string;
+}
+
+export interface UnifiedSearchResult {
+  offices: OfficeSearchResult[];
+  patients: PatientSearchResult[];
+  caregivers: CaregiverSearchResult[];
+  totalCount: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
 }

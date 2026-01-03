@@ -8,9 +8,18 @@ public static class DataSeeder
 {
     public static async Task SeedAsync(ApplicationDbContext context)
     {
-        // Check if data already exists
-        if (await context.Offices.AnyAsync())
+        try
         {
+            // Check if data already exists
+            if (await context.Offices.AnyAsync())
+            {
+                Console.WriteLine("✅ Data already seeded, skipping...");
+                return;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"⚠️  Warning: Could not check existing data - {ex.Message}");
             return;
         }
 
@@ -207,6 +216,6 @@ public static class DataSeeder
         context.PatientCaregivers.AddRange(patientCaregivers);
         await context.SaveChangesAsync();
 
-        Console.WriteLine("Sample data seeded successfully!");
+        Console.WriteLine("✅ Sample data seeded successfully!");
     }
 }

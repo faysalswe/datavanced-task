@@ -1,17 +1,26 @@
 import { Component } from '@angular/core';
-import { PatientGridComponent } from './components/patient-grid/patient-grid.component';
+import { RouterOutlet, RouterLink, Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [PatientGridComponent],
+  imports: [CommonModule, RouterOutlet, RouterLink],
   template: `
     <div class="app-container">
       <header class="app-header">
-        <h1>Healthcare Management System</h1>
+        <h1>Datavanced Task</h1>
+        <nav class="app-nav">
+          <a class="nav-button" routerLink="/search" routerLinkActive="active">
+            Search
+          </a>
+          <a class="nav-button" routerLink="/patients" routerLinkActive="active">
+            Patients
+          </a>
+        </nav>
       </header>
       <main class="app-main">
-        <app-patient-grid></app-patient-grid>
+        <router-outlet></router-outlet>
       </main>
     </div>
   `,
@@ -29,8 +38,37 @@ import { PatientGridComponent } from './components/patient-grid/patient-grid.com
     }
     
     .app-header h1 {
-      margin: 0;
+      margin: 0 0 15px 0;
       font-size: 24px;
+    }
+
+    .app-nav {
+      display: flex;
+      gap: 10px;
+    }
+
+    .nav-button {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: 2px solid transparent;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.3s;
+      text-decoration: none;
+    }
+
+    .nav-button:hover {
+      background-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .nav-button.active {
+      background-color: white;
+      color: #2c3e50;
+      border-color: white;
     }
     
     .app-main {

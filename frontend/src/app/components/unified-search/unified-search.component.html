@@ -1,0 +1,117 @@
+<div class="search-container">
+  <div class="search-section">
+    <h2>Unified Search</h2>
+    <p class="search-description">Search across Offices, Patients, and Caregivers by name and phone number</p>
+    
+    <div class="search-input-group">
+      <input 
+        type="text" 
+        class="search-input"
+        placeholder="Enter name or phone number..."
+        [(ngModel)]="keyword"
+        (keyup)="onKeyUp($event)"
+      >
+      <button class="search-button" (click)="search()" [disabled]="isLoading">
+        {{ isLoading ? 'Searching...' : 'Search' }}
+      </button>
+    </div>
+  </div>
+
+  <!-- No search performed yet -->
+  <div *ngIf="!hasSearched" class="empty-state">
+    <p>Enter a search term to get started</p>
+  </div>
+
+  <!-- Loading state -->
+  <div *ngIf="isLoading" class="loading-state">
+    <p>Searching...</p>
+  </div>
+
+  <!-- Search results -->
+  <div *ngIf="hasSearched && searchResults && !isLoading" class="results-container">
+    <div class="results-header">
+      <h3>Results ({{ getTotalResultsCount() }} found)</h3>
+      <p class="total-count">Total across all entities: {{ searchResults.totalCount }}</p>
+    </div>
+
+    <!-- Offices Results -->
+    <div *ngIf="searchResults.offices.length > 0" class="results-section">
+      <h4 class="section-title offices-title">Offices ({{ searchResults.offices.length }})</h4>
+      <div class="results-list">
+        <div class="result-item office-item" *ngFor="let office of searchResults.offices">
+          <div class="result-header">
+            <h5 class="result-name">{{ office.name }}</h5>
+            <span class="result-type">Office</span>
+          </div>
+          <div class="result-details">
+            <p><span class="label">Address:</span> {{ office.address }}</p>
+            <p><span class="label">Phone:</span> {{ office.phone }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Patients Results -->
+    <div *ngIf="searchResults.patients.length > 0" class="results-section">
+      <h4 class="section-title patients-title">Patients ({{ searchResults.patients.length }})</h4>
+      <div class="results-list">
+        <div class="result-item patient-item" *ngFor="let patient of searchResults.patients">
+          <div class="result-header">
+            <h5 class="result-name">{{ getFullName(patient.firstName, patient.lastName) }}</h5>
+            <span class="result-type">Patient</span>
+          </div>
+          <div class="result-details">
+            <p><span class="label">Phone:</span> {{ patient.phone }}</p>
+            <p><span class="label">Email:</span> {{ patient.email }}</p>
+            <p><span class="label">Office:</span> {{ patient.officeName }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Caregivers Results -->
+    <div *ngIf="searchResults.caregivers.length > 0" class="results-section">
+      <h4 class="section-title caregivers-title">Caregivers ({{ searchResults.caregivers.length }})</h4>
+      <div class="results-list">
+        <div class="result-item caregiver-item" *ngFor="let caregiver of searchResults.caregivers">
+          <div class="result-header">
+            <h5 class="result-name">{{ getFullName(caregiver.firstName, caregiver.lastName) }}</h5>
+            <span class="result-type">Caregiver</span>
+          </div>
+          <div class="result-details">
+            <p><span class="label">Phone:</span> {{ caregiver.phone }}</p>
+            <p><span class="label">Email:</span> {{ caregiver.email }}</p>
+            <p><span class="label">Specialization:</span> {{ caregiver.specialization }}</p>
+            <p><span class="label">Office:</span> {{ caregiver.officeName }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- No results -->
+    <div *ngIf="getTotalResultsCount() === 0" class="no-results">
+      <p>No results found for "{{ keyword }}"</p>
+    </div>
+
+    <!-- Pagination -->
+    <div *ngIf="searchResults.totalPages > 1" class="pagination">
+      <button 
+        class="pagination-button" 
+        (click)="previousPage()" 
+        [disabled]="currentPage === 1"
+      >
+        Previous
+      </button>
+      <span class="pagination-info">
+        Page {{ currentPage }} of {{ searchResults.totalPages }}
+      </span>
+      <button 
+        class="pagination-button" 
+        (click)="nextPage()" 
+        [disabled]="currentPage === searchResults.totalPages"
+      >
+        Next
+      </button>
+    </div>
+  </div>
+</div>
