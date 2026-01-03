@@ -7,6 +7,9 @@ using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configure Npgsql to use UTC timestamps
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
 // Add services to the container
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -80,16 +83,16 @@ if (app.Environment.IsDevelopment())
     try
     {
         // Apply pending migrations
-        Console.WriteLine("🔄 Applying migrations...");
+        Console.WriteLine("Applying migrations...");
         await context.Database.MigrateAsync();
-        Console.WriteLine("✅ Migrations applied successfully.");
+        Console.WriteLine("Migrations applied successfully.");
         
         // Seed sample data
         await HealthcareApp.Data.DataSeeder.SeedAsync(context);
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"❌ Error during database setup: {ex.Message}");
+        Console.WriteLine($"Error during database setup: {ex.Message}");
     }
 }
 

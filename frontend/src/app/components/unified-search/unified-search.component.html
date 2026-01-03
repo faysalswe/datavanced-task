@@ -11,8 +11,8 @@
         [(ngModel)]="keyword"
         (keyup)="onKeyUp($event)"
       >
-      <button class="search-button" (click)="search()" [disabled]="isLoading">
-        {{ isLoading ? 'Searching...' : 'Search' }}
+      <button class="search-button" (click)="search()">
+        Search
       </button>
     </div>
   </div>
@@ -22,13 +22,8 @@
     <p>Enter a search term to get started</p>
   </div>
 
-  <!-- Loading state -->
-  <div *ngIf="isLoading" class="loading-state">
-    <p>Searching...</p>
-  </div>
-
   <!-- Search results -->
-  <div *ngIf="hasSearched && searchResults && !isLoading" class="results-container">
+  <div *ngIf="hasSearched && searchResults" class="results-container">
     <div class="results-header">
       <h3>Results ({{ getTotalResultsCount() }} found)</h3>
       <p class="total-count">Total across all entities: {{ searchResults.totalCount }}</p>

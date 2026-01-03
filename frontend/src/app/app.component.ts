@@ -1,13 +1,15 @@
 import { Component } from '@angular/core';
 import { RouterOutlet, RouterLink, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { GlobalLoaderComponent } from './components/global-loader/global-loader.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink],
+  imports: [CommonModule, RouterOutlet, RouterLink, GlobalLoaderComponent],
   template: `
     <div class="app-container">
+      <app-global-loader></app-global-loader>
       <header class="app-header">
         <h1>Datavanced Task</h1>
         <nav class="app-nav">

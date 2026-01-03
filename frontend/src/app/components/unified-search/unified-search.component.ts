@@ -16,7 +16,6 @@ export class UnifiedSearchComponent implements OnInit {
   currentPage: number = 1;
   pageSize: number = 10;
   searchResults: UnifiedSearchResult | null = null;
-  isLoading: boolean = false;
   hasSearched: boolean = false;
 
   constructor(private searchService: UnifiedSearchService) {}
@@ -32,7 +31,6 @@ export class UnifiedSearchComponent implements OnInit {
       return;
     }
 
-    this.isLoading = true;
     this.currentPage = 1;
     this.performSearch();
   }
@@ -42,11 +40,9 @@ export class UnifiedSearchComponent implements OnInit {
       next: (result) => {
         this.searchResults = result;
         this.hasSearched = true;
-        this.isLoading = false;
       },
       error: (error) => {
         console.error('Error performing search:', error);
-        this.isLoading = false;
       }
     });
   }
